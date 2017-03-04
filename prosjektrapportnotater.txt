@@ -1,0 +1,10 @@
+UWP-app:
+    - Task list: Elementene i listen har hardkodet bredde. Hvordan gjøre dette mer tilpasset?
+    - Task list CS: Kunne brukt property for job_index
+
+Desktop app:
+    - MainWindow: Kunne tatt bort RoutedEventHandler
+    - Service: Skulle kunne velge mer enn en kategori
+
+Generelt:
+    - Burde kommunisere bedre hva verdiene for kvalitet og størrelse betyr

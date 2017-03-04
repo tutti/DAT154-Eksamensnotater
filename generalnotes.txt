@@ -1,0 +1,159 @@
+Windows OS based on messages
+    - Events put messages into the message queue
+    - Message loop retrieves messages and handles them
+    - Example messages:
+        - WM_PAINT: Message to repaint the window
+        - WM_LBUTTONDOWN: The left mouse button was pushed down
+
+SDK
+    - Needs a window procedure attached to the main window
+    Dialog:
+        - A simple window with information for the user and/or some minor input fields
+
+Graphics
+    - Resources are passed around in the form of integer IDs
+    - Handled almost exclusively in WM_PAINT
+    - Device Context: Represents a drawing surface (virtual or physical)
+    InvalidateRect:
+        - Triggers WM_PAINT
+        - Can invalidate just parts of a window or whole window
+        - Can specify whether to clear old contents first
+    Drawing objects:
+        - GDI has brushes, pens and text objects
+        - Created by calls to the API
+        - Will NOT be deleted automatically - can be kept or deleted, but must not be discarded
+    Stock objects:
+        - Acquired through GetStockObject
+        - Predefined
+        - Do NOT delete!
+
+Function pointers
+    - Allows us to pass functions as arguments
+    - Need a type that can hold a pointer to a function, example:
+        typedef int (*FPTYPE) (int a, int b)
+        This creates the type FPTYPE which can hold functions that take two ints and return an int
+
+Standard Template Library
+    - Collection of containers that can be used with any type
+    - Example: List
+
+Keyboard interaction
+    - Handled through messages like WM_KEYDOWN, WM_KEYUP, etc
+    - Keys have IDs that can be compared to VK_UP, VK_DOWN etc
+    - When listening for ASCII characters, use WM_CHAR instead
+
+Drawing context
+    - The function BeginPaint returns a drawing context
+    - Can create a virtual DC with CreateCompatibleDC(), which is compatible with our original DC
+    - Must create a new bitmap for the virtual DC to draw on it
+    - By drawing everything on a virtual DC and copying it to the main one, we can perform double buffering
+    - Double buffering allows us to avoid flickering effects
+    Copying from buffer to original:
+        - BitBlt: Just copies
+        - StretchBlt: Can stretch and/or mirror copied area
+        - TransparentBlt: Can make regions transparent
+        - PlgBlt: Can skew and rotate the copied area
+        - Others
+
+Timers
+    - Periodically send WM_TIMER to a window
+    - Can optionally specify a callback instead of sending WM_TIMER
+
+Device capabilities and information
+    - Determine size of drawing area with GetClientRect()
+    - Get other information through GetDeviceCaps()
+
+Threads
+    - Create thread with CreateThread(), passing to it a function (or address of where to start)
+    - Can wait for threads to finish with WaitForMultipleObjects()
+    - InitializeCriticalSection() returns a semaphore-like object
+    - Can use EnterCriticalSection() and LeaveCriticalSection() to ensure critical sections are left well enough alone
+
+.NET
+    - Common Language Runtime (CLR) combines languages
+    - Windows Presentation Foundation separates the GUI (XAML) from the model (C#)
+    - Code that targets the CLR is called managed code; code that doesn't is unmanaged
+
+Assemblies
+    - No relation to Assembly language
+    - Is a .NET library or executable
+    - Contains metadata that allows other projects to use the functions within
+    - Library: Compiled code with no Main() method, that can't be used as a program but can be included in other code
+
+Namespace
+    - A way to organise .NET code
+    - Groups together classes with a close relation
+    - Allows multiple namespaces to have classes with the same name
+    - Can be imported with the "using" directive
+    - Need references in the project to be able to use a namespace from outside the project
+
+Reference/Value types
+    - Value types hold the data about themselves within their allocation (C++ analogue: variables on stack)
+    - Reference types store a reference to their values on the heap (C++ analogue: variables on heap)
+    - Value types are numeric types, boolean, char, date, all structures, and enumerations
+    - Everything else is a reference type
+    - When assigning to a new variable, value types are copied while only the pointer to the reference type is copied
+    - Boxing can be done to place a value type in a reference type container
+
+Properties
+    - Holy shit why is .NET the only thing to do this
+    - Seriously other languages what the fuck are you doing
+    - This is brilliant
+    - A property is a class member with a getter and/or a setter
+    - Can be used like a regular class variable in code in or outside the class
+    - Visibility just like any other class member
+    - Getter and setter can have individual visibility, or not exist
+    - Default getter and setter just get and set the raw variable, but can be implemented differently
+
+Windows Forms
+    - Needs one main file program.cs which is the program's starting point
+    - One or more forms, having:
+        - Design file (C#)
+        - Code file (C#)
+        - Resource file (RESX)
+    - Can have other code files
+    - Forms can easily have more or fewer files than the above, that is a VS convention
+    - VS Designer allows you to drag and drop visual components to the form
+    - Components can also be modified through code
+
+Windows Presentation Foundation (WPF)
+    - Graphical elements are designed in a XAML file
+    - XAML is XML with an extra A (seriously why though)
+    - Uses DirectX instead of GDI
+    - Instead of starting in code, a tag in XAML defines the starting point
+
+Delegates
+    - A delegate is similar to a function pointer, but can hold multiple functions
+    - When a delegate is called, all functions that have been added to it are called
+    - Delegates must be declared with a specific signature and can only take functions with that signature
+    - Like a class, you must first declare the delegate type before you can make instances of it
+    - Delegates can be created where classes can be created
+    - Delegate instances can be created where regular variables can be created
+    - Functions can be assigned with += and removed with -=
+    - Using = will initialise the delegate, and remove all previously added functions
+    - Calling a delegate will throw an exception if no functions were added to it
+    - Otherwise, the delegate can be called just like any other function with its signature
+    - If only one function has been assigned, the delegate returns the value of that function
+    - Otherwise the value of the last called function is returned
+    - This is usually the last function added BUT THIS IS NOT GUARANTEED BY THE SPEC
+    - Can get each function by using GetInvocationList()
+    - Predefined generic delegates with up to 16 arguments are available in .NET
+    - Delegates allow us to create a decoupled publisher-subscriber model
+
+Events
+    - Events are very much like delegates and are based on them
+    - An event can be created from a delegate
+    - Assign with +=, remove with -=, functions have to fit the delegate's signature
+    - Events are fired the same way delegates are
+    - In .NET, events have to have the arguments (object sender, EventArgs args)
+    Differences from delegates:
+        - Events can be included in interfaces
+        - Events can only be invoked from the class they're in, delegates can be invoked anywhere
+        - Events have accessor functions "add" and "remove", just like "get" and "set" for properties
+
+Lambdas
+    - A lambda expression returns a function
+    - Lambdas are on the form "(args) => { body }"
+    - A single argument doesn't need parentheses, and the body can be replaced by an expression
+        Example: x => x * x
+    - Can take 0 arguments - "() => myFunc()"
