@@ -146,6 +146,7 @@ Events
     - Assign with +=, remove with -=, functions have to fit the delegate's signature
     - Events are fired the same way delegates are
     - In .NET, events have to have the arguments (object sender, EventArgs args)
+    - Controls usually have events (example: Button.MouseMove) that can have functions assigned to them
     Differences from delegates:
         - Events can be included in interfaces
         - Events can only be invoked from the class they're in, delegates can be invoked anywhere
@@ -157,3 +158,147 @@ Lambdas
     - A single argument doesn't need parentheses, and the body can be replaced by an expression
         Example: x => x * x
     - Can take 0 arguments - "() => myFunc()"
+
+Graphics in .NET
+    - .NET has a graphics object which is similar to SDK's Drawing Context
+    - Overriding the method OnPaint takes the place of listening for WM_PAINT
+    - OnPaint has drawing tools similar to those from the Drawing Context
+    - Namespace System.Drawing contains basic drawing tools (pens, brushes, shapes etc)
+    - System.Drawing.Drawing2D contains more advanced drawing tools (blending, gradients etc)
+    - The Color class contains predefined colours and methods for creating new ones
+    - Pens are used for drawing lines, including outlines; need a colour and a width
+    - Brushes are used for filling surfaces; several types exist (solid, hatch, texture, etc); need a colour
+    - Instead of overriding OnPaint we can use a drawing event, if we do not want to subclass the control
+    - The graphics object is supplied to OnPaint through the event args
+    - No need to delete objects
+
+Drawing in WPF
+    - Instead of drawing on a drawing surface, you use XAML objects and WPF does the drawing
+    - Animating shapes just means updating their properties, and redrawing is automatic
+    - When using a timer, use DispatcherTimer
+
+Modular programming
+    - Separating functionality into independent modules
+    - Interfaces are used to express the description of the module's functionality
+    Advantages:
+        - Less code to write
+        - Different people/teams can work on different bits of code
+        - Errors are easier to find
+        - Code is easier to reuse
+        - Variables are easier to keep in the correct scope
+    Disadvantages:
+        - The program contains multiple modules that must all work
+        - Versioning problems
+
+MVC
+    - Model-View-Controller
+    - Model: Contains the data and logic of the application
+    - View: Presents information to the user
+    - Controller: Handles communication with the user and routes their actions to the appropriate models and views
+    - The idea is to separate the Model from the View so that you can change one without having to change the other
+    MVVM:
+        - Model-View-ViewModel
+        - Model knows nothing
+        - ViewModel knows only about the Model (not the View)
+        - View knows only about the ViewModel (not the Model)
+        - What the shit?
+        - Apparently this is what WPF uses
+    MVP:
+        - Model-View-Presenter
+        - User interacts with the View only, not the Controller (because it doesn't exist)
+        - There's a one-to-one relationship between View and Presenter
+
+Software architecture
+    - Create a design that ensures usability, stability, maintainability and security
+    - Should fulfill user requirements, reduce business risks, and be flexible to changes in tech and requirements
+    - Consider conflicts between users, the business, and the system
+    - Build to change rather than last - it doesn't matter if it can last 10 years if it isn't good enough in 2 weeks
+    - Model to analyse and reduce risk
+    Key design principles:
+        - Separation of Concerns
+        - Single Responsibility: Each component should only do one thing
+        - Principle of Least Knowledge: Nothing should know more than it needs to
+        - Don't Repeat Yourself: Don't repeat yourself
+        - Minimise Upfront Design
+    Design practices:
+        - Consistent design patterns
+        - Don't duplicate functionality
+        - Prefer composition to inheritance
+        - Establish and stick to a coding style
+        - Test your shit
+        - Separate the layers of your application using abstraction
+    - A component should not rely on internal details of other components
+    - When something does need to cut across, keep it abstracted
+    Key considerations:
+        - Type of application: Web, mobile, desktop, etc
+        - Deployment strategy: Physical separation, communication etc
+        - Available technologies
+        - Quality requirements: Security, usability, performance etc
+        - Crosscutting concerns: Logging, security etc
+
+Routed Events
+    - This is one of WPF's things
+    - "Passes through" a hierarchy, any handler can mark it as handled and thus prevent further handling
+    - Types: Direct (no hierarchy), Bubbling (travels from inside out) and Tunneling (travels from outside in)
+    - Tunneling events are prefixed with "Preview"
+
+Universal Windows Platform (UWP)
+    - Introduced in Windows 10, because of Windows Phone
+    - Windows Phone has not had market success, on account of its lack of popular applications and general suckery
+    - UWP can run on anything that runs some form of Windows 10
+    - async: The method runs synchronously until an await is encountered, then returns to caller while waiting
+
+Design patterns
+    - A pattern is a predefined solution to a common problem
+    - Also called architectural styles
+    - Provides a solution to a frequently recurring problem
+    Deployment style: Client/Server:
+        - Distributed system: Client and server hold part of the application
+        - Client handles UI, server handles business logic
+        - Clients make requests, server fulfills them
+        - Multiple clients can use the same server
+        - Provides security, centralised data access, easy maintenance
+        - Need to be wary of stability and scalability
+    Structure style: Layered:
+        - Divides application into layers
+        - Each layer is a standalone unit
+        - Communication between layers is structured
+        - Abstractions are used to reduce coupling
+    Communication style: Message Bus:
+        - Facilitates communication between services
+        - Good for letting components be completely independent of each other but can handle the same message
+        - Advantages: Asynchronous, scalable, loose coupling
+        - Disadvantages: Everything needs to learn to communicate with the bus, there's some overhead
+
+LINQ
+    - Language INtegrated Query
+    - Queries various data sources, such as databases, XML documents or data in memory
+    - Similar to SQL
+    - Works with anything that implements IEnumerable
+    IEnumerable:
+        - An interface that allows looping with foreach as well as LINQ querying
+        - Must implement GetEnumerator(), which uses yield to return one element at a time
+        - yield is sort of like return, but instead of ending the method it suspends it until next call
+    - To use LINQ, include the System.Linq namespace
+    - Can be used either through chaining method calls or through the special LINQ syntax, or mixing these two
+    - Arguments to method calls must be function pointers, lambdas are often used for this
+
+ADO.NET
+    - Provides access to data sources such as databases or XML structures
+    - With LINQ, provides easy data access
+    - Found in System.Data
+    - To connect to a database, use a connection string
+    - Remember to Close() the connection or wrap it in a using block
+    - Can be used to execute SQL directly, but you shouldn't because reasons
+
+LINQ and ADO.NET
+    - Found in System.Data.Linq
+    - Uses the same connection string as ADO.NET
+
+Entity classes
+    - Entity classes are .NET classes corresponding to database tables
+    - The class needs to have properties corresponding to the table's columns
+    - Like in Java, entity classes mark these properties and the class itself with annotations
+    - Unlike in Java, these annotations do not induce a desire to vomit violently
+    - LINQ's data context object has a GetTable<type>() method where "type" is an entity class
+    - This Table object can be selected from using regular LINQ queries
