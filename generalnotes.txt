@@ -282,6 +282,9 @@ LINQ
     - To use LINQ, include the System.Linq namespace
     - Can be used either through chaining method calls or through the special LINQ syntax, or mixing these two
     - Arguments to method calls must be function pointers, lambdas are often used for this
+    - Some LINQ functions return anonymous types, in this case the "var" keyword is necessary
+    - "var" replaces the variable type in its declaration
+    - Even with "var", the variable still has a type, you just didn't write it in the code
 
 ADO.NET
     - Provides access to data sources such as databases or XML structures
@@ -302,3 +305,53 @@ Entity classes
     - Unlike in Java, these annotations do not induce a desire to vomit violently
     - LINQ's data context object has a GetTable<type>() method where "type" is an entity class
     - This Table object can be selected from using regular LINQ queries
+
+More XAML
+    - Without specific instructions, a ListView shows the string representation of the list's items
+    - Instead, you can use the tag <DataTemplate> to decide what each item should look like
+    - Data binding can be used to bind data to the visual controls
+    Binding requirements:
+        - A binding source: An object of any class that has fields you want to show
+        - A binding target: A control in the UI, e.g. a button or a label
+        - A binding object: Created by XAML from strings like "{Binding name}"
+    - To get data back from controls, bind a function to their Changed events (or similar) and read them there
+
+Unsafe programming
+    - Cross between managed and unmanaged code
+    - Lets you address memory directly
+    - Allows you to e.g. interface directly with the OS or use algorithms that work better with pointers
+    - Functions that uses pointer operations (*, &, ->) must be marked as "unsafe"
+    - This code is still managed though, so wtf .NET?
+    - Wrap a block in "fixed" to prevent .NET from moving variables around in memory
+    - Can sometimes be necessary to use functions from a C++ DLL
+
+ASP.NET
+    - .NET for web
+    - Usually C#
+    - Similar layout to WPF: One designer file, one presentation file (.aspx) and one code file
+    - Tags are prefixed by "asp:", and are preprocessed server side before being sent to the client
+    - A master page holds layout shared by multiple pages, often all pages
+    - Master pages are not based on any kind of HTML frames
+    - POST data can be retrieved from the form controls after checking if the page load is a postback
+    - Validators can be used to validate field data - these work both client side and server side
+    - Has built in support for AJAX requests, using a <ScriptManager> and an <UpdatePanel>
+
+LINQ to XML
+    - The XElement class represents an element in XML
+    - This can be used to add or remove elements, or change them
+    - Just like databases, XML data sources can do more complex operations such as joins
+
+UI design
+    - Main design: Usability
+    - The design should be easy to both understand and use, by everyone who will use it
+    - Text should be understandable, icons should be meaningful
+    - Research your audience and design the application for their needs, NOT your own
+    - Test your design on users, consider getting professional help as this is a hard topic
+    - Comply with the standard look&feel of the platform, using the user's settings if applicable
+    - Remember that some people have disabilities such as reduced eyesight, hearing etc
+    - Don't get fancy - your application is a means to an end, not the new "cool kid"
+    - Make sure text is simple and to the point, don't cram too many details into a small space
+    - Not everyone can use a mouse or even a keyboard - make sure they can still use your app
+    - Your app should be able to handle errors gracefully
+    - User errors should not have major consequences without sufficient warnings
+    - Don't try to "guess" what the user meant
